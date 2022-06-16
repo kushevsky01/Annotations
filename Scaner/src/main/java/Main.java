@@ -23,8 +23,7 @@ public class Main {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException, InstantiationException {
         Main array = new Main();
         Foo foo = new Foo();
-        String s = "->";
-        doAll(foo, s);
+        doAll(foo, "->");
 
     }
 
@@ -38,9 +37,8 @@ public class Main {
         return false;
     }
 
-    public static <T> void doAll(T cls, String s) throws IllegalAccessException, InstantiationException {
-        Class cls1 = cls.getClass();
-        int n = 3;
+    public static void doAll(Object ob, String s) throws IllegalAccessException, InstantiationException {
+        Class cls1 = ob.getClass();
 
         Field[] fields = cls1.getDeclaredFields();
         for (Field field: fields){
@@ -48,20 +46,11 @@ public class Main {
             for (Annotation annotation: annotations){
                 if(annotation instanceof Scan){
                     Scan an = (Scan) annotation;
-//                    System.out.println(an.name()+ ": "+ field.get(cls) );
                     if (!contains(new List[]{Main.getArray()}, field.getType())){
-                        if (field.getType() != String.class){
-                            System.out.println(s+an.name()+ ": "+field.getName());
-                        }else{
-                            System.out.println(s+an.name()+ ": "+ field.get(cls) );
-                        }
+                        System.out.println(s+an.name()+ ": "+field.get(ob));
                         doAll(field.getType().newInstance(), "   " +s);
-                        if (field.getType() != String.class){
-                            System.out.println("   "+s+field.toString());
-                        }
-
                     }else{
-                        System.out.println(s+an.name()+ ": "+ field.get(cls) );
+                        System.out.println(s+an.name()+ ": "+ field.get(ob) );
                     }
                 }
 
@@ -83,21 +72,21 @@ class Foo{
 //    int i = 3;
 
     @Scan(name = "test")
-     Boo boo;
+     Boo boo ;
 }
 
 class Boo{
-//    @Scan()
-//    String test3 = "World";
+    @Scan()
+    String test3 = "World";
 
     @Scan(name = "test")
     Moo moo;
 
-//    @Scan(name = "test2")
-//    String len = "Love";
-//
-//    @Scan(name = "test3")
-//    int i = 3;
+    @Scan(name = "test2")
+    String len = "Love";
+
+    @Scan(name = "test3")
+    int i = 3;
 
 
 
